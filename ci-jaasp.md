@@ -1,7 +1,6 @@
 # Continuous Integration with Jenkins | Ansible | Artifactory | SonarQube | PHP
 
 ## Step 1: Simulating a typical CI/CD Pipeline for a PHP Based application
-    This is a continuation of Project 11 through Project 13.
     Note: Create servers required for an environment you are working with at the moment only. For example, when doing deployments for development, do not create servers for integration, pentest, or production yet.
 
 ### Step 1.1: Set Up
@@ -594,7 +593,7 @@ To enable persistence after reboot, open the /etc/sysctl.conf and append the fol
   sudo systemctl start postgresql
   sudo systemctl enable postgresql
   ```
-  
+
 - Change the default password for postgres user (to any password you can easily remember)
   ```
   sudo passwd postgres
