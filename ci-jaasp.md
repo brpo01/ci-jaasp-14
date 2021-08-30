@@ -926,10 +926,10 @@ Likewise, if a job is run in a non-specific branch, SonarQube Qualty Gate will b
 - To automatically run the pipeline when there is a code push, we will configure github webhook
 
 ## Step 6: Deploy to all Environments
-To deploy to all environemnts, we will configure the jenkinsfile in the config-mgt-ansible folder in two key places.
+To deploy to all environments, we will configure the jenkinsfile in the config-mgt-ansible folder in two key places.
 - We leave the *defaultValue* in parameters blank like this: **defaultValue: ''**
 - In the Execute Ansible Stage, we will update the *inventory* like this: inventory: **'inventory/${inventory_file}'**
-
+- Run your pipeline on all the environments
 
 ![6](https://user-images.githubusercontent.com/47898882/131374420-0d723c80-0d18-4945-a2b5-341b34332587.JPG)
 
