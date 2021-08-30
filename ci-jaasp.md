@@ -512,7 +512,7 @@ Most commonly used tool for php code quality analysis is **phploc**
     
  This build job tells Jenkins to trigger a job in the ansible-config-mgt pipeline. Since the ansible-config-mgt pipeline requires some parameters, we parse them using the 'parameters' value.
     
-![6](https://user-images.githubusercontent.com/47898882/131374420-0d723c80-0d18-4945-a2b5-341b34332587.JPG)
+![15](https://user-images.githubusercontent.com/47898882/131384165-de91ca31-3d0b-46ae-9b3e-63c0dbad7f30.JPG)
 
 
 ## Step 3: Install and Configure SonarQube on Ubuntu 20.04 With PostgreSQL as a Backend Database
@@ -833,10 +833,12 @@ List the content to see the scanner tool *sonar-scanner* with command "ls -latr"
   ```
 - If everything was configured properly, you should see something like this:
 
+![6](https://user-images.githubusercontent.com/47898882/131374420-0d723c80-0d18-4945-a2b5-341b34332587.JPG)
  
 - Navigate to your php-todo dashboard on SonarQube UI
     
-![{DAC407E4-E6B1-40F9-AC94-ABA2CA47E04D} png](https://user-images.githubusercontent.com/76074379/120863448-6c913800-c53f-11eb-94b5-f4120b34f9a3.jpg)
+![14](https://user-images.githubusercontent.com/47898882/131383744-5b828964-7af5-48ed-b9dd-dc8020952240.JPG)
+
 
 ### Step 3.7: Conditionally Deploy to Higher Environments
 - Include a **when** condition to execute the Quality Gate stage only when the running branch is develop, hotfix, release, main
@@ -849,7 +851,8 @@ List the content to see the scanner tool *sonar-scanner* with command "ls -latr"
         waitForQualityGate abortPipeline: true
     }
   ```
-  Quality Gate stage snippet should look like this:
+
+- Quality Gate stage snippet should look like this:
   ```
   stage('SonarQube Quality Gate') {
       when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
@@ -867,21 +870,18 @@ List the content to see the scanner tool *sonar-scanner* with command "ls -latr"
     }
   ```
     
- ![{E9B408C7-2FF7-4E0D-834D-3334CD8DBBAE} png](https://user-images.githubusercontent.com/76074379/120865631-42417980-c543-11eb-9157-c79fb4f38b79.jpg)
-    
-  You should get the following when you run the pipeline
-    
- ![{FFCC0129-5A31-4983-B4C6-CFD98E4B7DF7} png](https://user-images.githubusercontent.com/76074379/120863575-a3674e00-c53f-11eb-85e6-3a3e43b7836b.jpg)
-    
- ![{6AAA9451-E55E-4CBC-88C4-AC929E04B671} png](https://user-images.githubusercontent.com/76074379/120863778-fb9e5000-c53f-11eb-9ea5-5032cd1f3cd6.jpg)
+- You should get the following when you run the pipeline
   
-  When running a non-specified branch, SonarQube Quality Gate stage is skipped
+  ![16](https://user-images.githubusercontent.com/47898882/131384370-4e3f47d3-6c73-40de-88c9-843784376b96.JPG)
+
+- When running a non-specified branch, SonarQube Quality Gate stage is skipped
 
 ![{3ACEA464-DA11-424E-9724-6FD0345CFAA7} png](https://user-images.githubusercontent.com/76074379/120863848-28eafe00-c540-11eb-8258-9c4bb595809c.jpg)
     
-  The Sonarqube UI will look like this
-    
-   ![{3503223D-3AC1-4C9A-ADC6-A051D7C34F91} png](https://user-images.githubusercontent.com/76074379/120872601-08c53a00-c554-11eb-81be-9a1cc391d387.jpg)
+- The Sonarqube UI will look like this:
+
+  ![17](https://user-images.githubusercontent.com/47898882/131384551-f735280b-9421-4500-a778-fb3305ecfd6b.JPG)
+
     
 ## Step 4: Configure Jenkins slave servers
 - Spin up a new EC2 Instance
@@ -896,18 +896,16 @@ List the content to see the scanner tool *sonar-scanner* with command "ls -latr"
   - For Launch Method, select Launch Agents via SSH
   - Add SSH with username and private key credentials with username as ubuntu and private key as the private key of the master node
   - For Host Key Verification Strategy, select Manually trusted key validation strategy
-  - Click Save
-  ![{E9D7B16C-16AC-43DB-9692-11E17B6D07A3} png](https://user-images.githubusercontent.com/76074379/120866205-4cb04300-c544-11eb-8899-0e23a55f2ea1.jpg)
+  
+  ![18](https://user-images.githubusercontent.com/47898882/131384818-6d79de66-052c-4a52-a418-95207ec5be16.JPG)
 
-- Repeat the above steps to add more servers
+- Repeat the above steps to add more servers. Go to jenkins UI and run build, An error will be generated but it will also create */var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf/sonar-scanner.properties* directory
     
-Go to jenkins UI and run build, An error will be generated but it will also create */home/ubuntu/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf/sonar-scanner.properties* directory
-    
-Open sonar-scanner.properties file
+- Open sonar-scanner.properties file
 ```
 sudo vi sonar-scanner.properties
 ```
-Add configuration related to php-todo project
+- Add configuration related to php-todo project
 
  ```
 sonar.host.url=http://SonarQube-Server-IP-address:9000
@@ -918,70 +916,24 @@ sonar.php.exclusions=**/vendor/**
 sonar.php.coverage.reportPaths=build/coverage/phploc.csv,coverage-report.xml
 sonar.php.tests.reportPath=reports/unitreport.xml,tests-report.xml
  ```
-![{F50A5205-FCD3-4D34-B091-6621B6A02BB6} png](https://user-images.githubusercontent.com/76074379/120870587-298a9100-c54e-11eb-9af5-e0fbc118e39c.jpg)
     
-To further examine the configuration of the scanner tool on the Jenkins slave node - navigate into the tools directory
-```
-cd /home/ubuntu/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin. 
-```
-    
-List the content to see the scanner tool *sonar-scanner* with command "ls -latr". the files in there are just exactly like the Master node
-
- ![{A4BE4E78-2F7D-4473-BCC3-C4BAAC875C02} png](https://user-images.githubusercontent.com/76074379/120866511-f4c60c00-c544-11eb-8239-0c26c4d39aa8.jpg)
-    
-Just like the master node, if a job is run in a specific branch e.g main, it will not pass Sonarqube Quality Gate test and it will be aborted
-    
-![{E284B53F-505F-49BF-9EDA-B7694742FB85} png](https://user-images.githubusercontent.com/76074379/120870820-cf3e0000-c54e-11eb-8292-e3dbd425643f.jpg)
-    
+- Just like the master node, if a job is run in a specific branch e.g main, it will not pass Sonarqube Quality Gate test and it will be aborted.
 Likewise, if a job is run in a non-specific branch, SonarQube Qualty Gate will be skipped and it will be successful
     
-![{E957D03C-A438-458A-BE75-4FB896EC0F97} png](https://user-images.githubusercontent.com/76074379/120871003-5a1efa80-c54f-11eb-8824-5e1ab504b7ff.jpg)
 
 ## Step 5: Configure GitHub WebHook for Automatic Build of Pushed Code
     
- To automatically run the pipeline when there is a code push, we will configure github webhook
-    
-![{EF655846-9CCB-4839-9E16-14CDB0D6EDCF} png](https://user-images.githubusercontent.com/76074379/120871215-e03b4100-c54f-11eb-8ea7-8764515bc96b.jpg)
-    
-![{CB0AEC6B-DEC9-4A77-8726-9F52FF310CEE} png](https://user-images.githubusercontent.com/76074379/120871251-f517d480-c54f-11eb-968b-5acff8520151.jpg)
-
+- To automatically run the pipeline when there is a code push, we will configure github webhook
 
 ## Step 6: Deploy to all Environments
 To deploy to all environemnts, we will configure the jenkinsfile in the config-mgt-ansible folder in two key places.
 - We leave the *defaultValue* in parameters blank like this: **defaultValue: ''**
-- In the Execcute Ansible Stage, we will update the *inventory* like this: inventory: **'inventory/${inventory_file}'**
+- In the Execute Ansible Stage, we will update the *inventory* like this: inventory: **'inventory/${inventory_file}'**
 
-![{8F1D653E-1870-46BB-B9D3-AEE3E2ACCA4D} png](https://user-images.githubusercontent.com/76074379/120872271-08786f00-c553-11eb-9242-a713cffed7e8.jpg)
-    
-![{5EECDC47-012C-46BB-A116-75704F1C1F66} png](https://user-images.githubusercontent.com/76074379/120872299-23e37a00-c553-11eb-8790-7172377cabd8.jpg)
-    
-    
-If everything goes well, the output will look like this. (I only provisioned servers for CI,DEV AND SIT environmnts)
 
-![{91015C6F-22DE-41B3-B463-117129E50214} png](https://user-images.githubusercontent.com/76074379/120872378-7755c800-c553-11eb-9fe1-3b19b045dcf0.jpg)
-    
-## Credits
+![6](https://user-images.githubusercontent.com/47898882/131374420-0d723c80-0d18-4945-a2b5-341b34332587.JPG)
 
-https://www.jenkins.io/doc/book/blueocean/getting-started/
+![19](https://user-images.githubusercontent.com/47898882/131385667-8199d84a-b7a9-4e6d-9e63-992ec8c9124c.JPG)
 
-https://en.wikipedia.org/wiki/SonarQube
 
-https://www.howtoforge.com/tutorial/ubuntu-jfrog/
 
-https://www.jfrog.com/confluence/display/JFROG/JFrog+Artifactory
-
-https://www.jenkins.io/doc/book/blueocean/getting-started/#accessing-blue-ocean
-
-https://dev.to/nicoavila/how-to-validate-your-jenkinsfile-locally-before-committing-334l
-
-https://matthiasnoback.nl/2019/09/using-phploc-for-quick-code-quality-estimation-part-1/
-
-https://plugins.jenkins.io/sonar/
-
-https://getcomposer.org/doc/00-intro.md#globally
-
-https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc
-    
-https://stackoverflow.com/questions/60269790/jenkins-set-a-parameter-defaultvalue-dynamically
-    
-https://docs.sonarqube.org/
