@@ -671,35 +671,17 @@ Since Sonarqube cannot be run as root user, we have to create a **sonar** user t
     ```
     sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
     ```
+    ![8](https://user-images.githubusercontent.com/47898882/131381463-b8c77876-fd3f-4918-8d90-ad3aaf2a93b4.JPG)
+
+  - Enter the sonar script file. Find and set RUN_AS_USER to be equals to sonar
     
- ![{A5B4081C-7422-43C9-9102-C69DBD9C5CF0} png](https://user-images.githubusercontent.com/76074379/120858676-f9d08e80-c537-11eb-98f3-bfa3f3fbbe0b.jpg)
-    
-  - enter the sonar script file. Find and set RUN_AS_USER to be equals to sonar
-    
     ```
-    sudo nano /opt/sonarqube/bin/linux-x86-64/sonar.sh
+    sudo vi /opt/sonarqube/bin/linux-x86-64/sonar.sh
     ```
-    ```
-    # If specified, the Wrapper will be run as the specified user.
+   ![7](https://user-images.githubusercontent.com/47898882/131376387-3689f09a-f143-46e5-9f56-91094cff6e6a.JPG)
 
-    # IMPORTANT - Make sure that the user has the required privileges to write
 
-    #  the PID file and wrapper.log files.  Failure to be able to write the log
 
-    #  file will cause the Wrapper to exit without any way to write out an error
-
-    #  message.
-
-    # NOTE - This will set the user which is used to run the Wrapper as well as
-
-    #  the JVM and is not useful in situations where a privileged resource or
-
-    #  port needs to be allocated prior to the user being changed.
-
-     RUN_AS_USER=sonar
-    ```
-![{32173414-E985-4151-BE34-9CA30E8814BF} png](https://user-images.githubusercontent.com/76074379/120858990-6e0b3200-c538-11eb-8a61-86bd4e07b8db.jpg)
-  
   - Add sonar user to sudoers file
     - First set the user's password to something you can easily remember
       ```
@@ -730,8 +712,8 @@ Since Sonarqube cannot be run as root user, we have to create a **sonar** user t
     ```
     tail /opt/sonarqube/logs/sonar.log
     ```
-![{644A82DE-3838-4422-A2F2-0B62BF0FC8CC} png](https://user-images.githubusercontent.com/76074379/120859288-da863100-c538-11eb-9e6c-fe692fa32575.jpg)
-    
+    ![9](https://user-images.githubusercontent.com/47898882/131381805-559108c0-69b1-444f-82ad-d78d6d88fc8f.JPG)
+
   - Configure systemd to manage SonarQube service
     - Stop the sonar service
       ```
@@ -764,10 +746,9 @@ Since Sonarqube cannot be run as root user, we have to create a **sonar** user t
       [Install]
       WantedBy=multi-user.target
       ```
-    
- ![{19C5E1C9-C963-48EC-8FF7-A9D80C0C9D4F} png](https://user-images.githubusercontent.com/76074379/120859433-0c979300-c539-11eb-87e2-fab3ec118b72.jpg)
-    
-      Save and exit
+    ![10](https://user-images.githubusercontent.com/47898882/131381943-f9ad1d6d-9210-48fc-8193-ffedd4574fb7.JPG)
+
+
     - Use systemd to manage the service
       ```
       sudo systemctl start sonar
@@ -775,14 +756,12 @@ Since Sonarqube cannot be run as root user, we have to create a **sonar** user t
       sudo systemctl status sonar
       ```
     
-![{08901825-4F64-47EA-B2CF-54F756E20A14} png](https://user-images.githubusercontent.com/76074379/120859515-2fc24280-c539-11eb-892f-73d91c7f60f7.jpg)
-    
 ### Step 3.5: Access Sonarqube
 - Access the SonarQube by going to http://sonarqube-public-ip-address:9000, use **admin** as your username and password
     
  **Note**: Do not forget to open ports 9000 and 5432 on the security group.
     
-![{C3EC02C7-4DFF-47E8-9C50-92BC0A873486} png](https://user-images.githubusercontent.com/76074379/120636060-06fb5980-c422-11eb-8199-eb54b6fbd3d0.jpg)
+![11](https://user-images.githubusercontent.com/47898882/131382181-e1e85387-f4b0-4920-8bf7-2c5e4d7d3d18.JPG)
 
 ### Step 3.6: Configure SonarQube and Jenkins for Quality Gate
 - Install SonarQube plugin in Jenkins UI
@@ -798,8 +777,6 @@ Since Sonarqube cannot be run as root user, we have to create a **sonar** user t
   - Enter the name
   - Enter URL as http://jenkins-server-ip:8080/sonar-webhook/
     
- ![{CDCE0F5D-851E-4075-887E-7852390CD467} png](https://user-images.githubusercontent.com/76074379/120864242-c21a1480-c540-11eb-96a8-37cd0b810e74.jpg)   
-
 - Setup SonarScanner for Jenkins
   - In Jenkins UI, go to Manage Jenkins > Global Tool Configuration
   - Look for SonarQube Scanner
@@ -807,9 +784,10 @@ Since Sonarqube cannot be run as root user, we have to create a **sonar** user t
   - Check the 'Install automatically' box
   - Select 'Install from Maven Central'
 
- ![{076ABE72-E8F8-42A0-B9D9-4E5D005E5C83} png](https://user-images.githubusercontent.com/76074379/120864534-35bc2180-c541-11eb-88d1-b76b07309866.jpg)
+ ![12](https://user-images.githubusercontent.com/47898882/131382569-0c65b38b-bd58-4559-ba79-28182f4cfd0a.JPG)
+
     
- Save and run the pipeline to install the scanner. An error will be generated but it will also create "/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf/sonar-scanner.properties" directory
+- Save and run the pipeline to install the scanner. An error will be generated but it will also create "/var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf/sonar-scanner.properties" directory
 
 - Edit sonar-scanner.properties file
   ```
@@ -835,7 +813,8 @@ cd /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQube
     
 List the content to see the scanner tool *sonar-scanner* with command "ls -latr". That is what we are calling in the pipeline script.
 
-![{FFEC106C-76B8-428A-8212-C42BEB762A31} png](https://user-images.githubusercontent.com/76074379/120870372-a0735a00-c54d-11eb-9b0a-138e1f1dc0ec.jpg)
+![13](https://user-images.githubusercontent.com/47898882/131382976-83b90503-52cc-4f0c-8c16-7dfadd18b3bb.JPG)
+
 
  
 - Add the following build stage for Quality Gate
@@ -852,9 +831,9 @@ List the content to see the scanner tool *sonar-scanner* with command "ls -latr"
         }
     }
   ```
+- If everything was configured properly, you should see something like this:
+
  
- 
-    
 - Navigate to your php-todo dashboard on SonarQube UI
     
 ![{DAC407E4-E6B1-40F9-AC94-ABA2CA47E04D} png](https://user-images.githubusercontent.com/76074379/120863448-6c913800-c53f-11eb-94b5-f4120b34f9a3.jpg)
