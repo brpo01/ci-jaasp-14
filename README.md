@@ -1,5 +1,6 @@
 ##  Continuous Integration with Jenkins, Ansible, Artifactory, Sonarqube and PHP
-Ansible Playbook to automate the deployment of a web solution. Covering the usage of static assignments(import) and dynamic assignments(include) to automate the process of configuring multiple target servers
+Ansible Playbook to automate the deployment of a web solution. Covering the usage of static assignments(import) and dynamic assignments(include) to automate the process of configuring multiple target servers. Check [ci-jaasp](https://github.com/brpo01/ci-jassp-14/blob/master/ci-jaasp.md) for project documentation.
+
 
 ## Intro
 The following project demonstrates the setup of continuous integration for a PHP-based application.
